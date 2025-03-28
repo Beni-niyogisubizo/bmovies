@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ movie.title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='details-styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+</head>
+<body class="fade-in">
+    <a href="/"><i class="fas fa-arrow-left"></i> Back to Search</a>
+
+    <div class="movie-details">
+        <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" alt="{{ movie.title }}" class="poster">
+
+        <div class="movie-info">
+            <h1>{{ movie.title }} <span>({{ movie.release_date[:4] }})</span></h1>
+            
+            <div class="rating">
+                <i class="fas fa-star"></i>
+                <span>{{ movie.vote_average }}/10</span>
+                <span class="vote-count">({{ movie.vote_count }} votes)</span>
+            </div>
+
+            <div class="genres">
+                {% if movie.genres %}
+                    {% for genre in movie.genres %}
+                        <span class="genre-tag">{{ genre.name }}</span>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <h3>Overview</h3>
+            <p class="overview">{{ movie.overview }}</p>
+
+            <div class="additional-details">
+                <div class="detail-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Release Date: {{ movie.release_date }}</span>
+                </div>
+                {% if movie.runtime %}
+                <div class="detail-item">
+                    <i class="fas fa-clock"></i>
+                    <span>Runtime: {{ movie.runtime }} minutes</span>
+                </div>
+                {% endif %}
+            </div>
+
+            {% if trailer %}
+                <h3>Trailer</h3>
+                <div class="trailer-container">
+                    <iframe src="https://www.youtube.com/embed/{{ trailer.key }}" frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen></iframe>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        
+        window.addEventListener('load', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.movie-details > *').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
