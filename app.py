@@ -51,4 +51,4 @@ def movie_details(movie_id):
     return render_template("details.html", movie=movie, trailer=trailer)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000)
